@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oops! 💔</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #1a1a2e 0%,
+          #16213e 50%,
+          #0f3460 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .error-container {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 500px;
+      }
+
+      h1 {
+        font-size: 4rem;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      a {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #ff1493, #ff69b4);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 20, 147, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <h1>{{ status_code }}</h1>
+      <p>{{ message }}</p>
+      <p style="font-size: 3rem; margin-bottom: 30px">💔</p>
+      <a href="/">Create a New Invitation</a>
+    </div>
+  </body>
+</html>
