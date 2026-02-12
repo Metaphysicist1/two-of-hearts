@@ -11,6 +11,7 @@
 A complete, production-ready fullstack web application with:
 
 ### Backend (Python FastAPI)
+
 - ✅ SQLAlchemy ORM with SQLite database
 - ✅ File upload handling with Pillow image compression
 - ✅ Three routes: GET `/`, POST `/create`, GET `/view/{id}`
@@ -19,6 +20,7 @@ A complete, production-ready fullstack web application with:
 - ✅ Proper error handling (404, 400, 500)
 
 ### Frontend (Jinja2 Templates)
+
 - ✅ Beautiful glassmorphism design (form page)
 - ✅ Animated particles and floating hearts
 - ✅ Theme selector (Romantic, Playful, Elegant, Minimalist)
@@ -27,6 +29,7 @@ A complete, production-ready fullstack web application with:
 - ✅ Responsive mobile design
 
 ### Deployment Ready
+
 - ✅ Procfile (for Railway/Heroku)
 - ✅ requirements.txt (all dependencies)
 - ✅ railway.toml (Railway config)
@@ -37,6 +40,7 @@ A complete, production-ready fullstack web application with:
 ## 🚀 Quick Start (5 minutes)
 
 ### For Local Testing
+
 ```bash
 # 1. Create virtual environment
 python -m venv venv
@@ -57,6 +61,7 @@ python main.py
 ```
 
 ### For Railway Deployment
+
 ```bash
 # 1. Commit to GitHub
 git add .
@@ -79,12 +84,14 @@ git push origin main
 ### `main.py` (Complete Backend Logic)
 
 **Imports & Setup:**
+
 - FastAPI application
 - SQLAlchemy ORM for database models
 - Jinja2 template rendering
 - PIL/Pillow for image compression
 
 **Database Model: `Invitation`**
+
 ```python
 class Invitation(Base):
     __tablename__ = "invitations"
@@ -98,9 +105,9 @@ class Invitation(Base):
 
 **Key Functions:**
 
-1. `generate_short_id()` → Creates 12-char UUID  
-2. `compress_image(file)` → Resize, compress, convert to base64  
-3. `get_db()` → Database session dependency  
+1. `generate_short_id()` → Creates 12-char UUID
+2. `compress_image(file)` → Resize, compress, convert to base64
+3. `get_db()` → Database session dependency
 
 **Routes:**
 
@@ -112,6 +119,7 @@ class Invitation(Base):
 ---
 
 ### `requirements.txt` (All Dependencies)
+
 ```
 fastapi==0.109.0         # Web framework
 uvicorn[standard]==0.27.0 # ASGI server
@@ -127,6 +135,7 @@ pillow==10.1.0           # Image compression (PIL)
 ### `templates/index.html` (Creation Form)
 
 **Key Changes from Original:**
+
 - Changed from `<form id="invitationForm">` to `<form method="POST" action="/create" enctype="multipart/form-data">`
 - Input names match FastAPI form parameters:
   - `name` (recipient)
@@ -138,13 +147,20 @@ pillow==10.1.0           # Image compression (PIL)
 - Still has beautiful UI, animations, themes
 
 **Form Fields:**
+
 ```html
-<input name="name" required />                <!-- Recipient name -->
-<input name="sender" />                      <!-- Sender name (optional) -->
-<input name="photo" type="file" />           <!-- Photo (optional) -->
-<input name="message" maxlength="500" required /> <!-- Message -->
-<input name="theme" type="hidden" />         <!-- Selected theme -->
-<button type="submit">🚀 Create & Share</button>  <!-- Submit -->
+<input name="name" required />
+<!-- Recipient name -->
+<input name="sender" />
+<!-- Sender name (optional) -->
+<input name="photo" type="file" />
+<!-- Photo (optional) -->
+<input name="message" maxlength="500" required />
+<!-- Message -->
+<input name="theme" type="hidden" />
+<!-- Selected theme -->
+<button type="submit">🚀 Create & Share</button>
+<!-- Submit -->
 ```
 
 ---
@@ -152,17 +168,25 @@ pillow==10.1.0           # Image compression (PIL)
 ### `templates/viewer.html` (Invitation Display)
 
 **Jinja2 Variables Passed from FastAPI:**
+
 ```html
-Dear <strong>{{ name }}</strong>,              <!-- Recipient name -->
+Dear <strong>{{ name }}</strong>,
+<!-- Recipient name -->
 {% if photo %}
-<img src="{{ photo }}" alt="Photo" />         <!-- Base64 photo -->
+<img src="{{ photo }}" alt="Photo" />
+<!-- Base64 photo -->
 {% endif %}
-<p>{{ message }}</p>                          <!-- Message -->
-<div class="theme-{{ theme }}">               <!-- Theme class -->
-<div class="letter-signature">{{ sender }}</div> <!-- Sender name -->
+<p>{{ message }}</p>
+<!-- Message -->
+<div class="theme-{{ theme }}">
+  <!-- Theme class -->
+  <div class="letter-signature">{{ sender }}</div>
+  <!-- Sender name -->
+</div>
 ```
 
 **Dynamic Theme:**
+
 - CSS class applied: `theme-romantic`, `theme-playful`, etc.
 - Different styling per theme (colors, fonts, borders)
 - All theme styling in CSS (no JavaScript needed)
@@ -176,6 +200,7 @@ Simple 404/error page with link back to home.
 ---
 
 ### `Procfile` (Railway/Heroku Deployment)
+
 ```
 web: uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
@@ -193,6 +218,7 @@ Optional, but ensures Railway uses correct settings.
 ## 🔄 How It Works (User Flow)
 
 ### 1. User Creates Invitation
+
 ```
 User visits: https://app.com/
   ↓
@@ -211,6 +237,7 @@ Browser submits: POST /create (multipart/form-data)
 ```
 
 ### 2. Backend Processing
+
 ```
 FastAPI receives POST /create
   ↓
@@ -242,6 +269,7 @@ RedirectResponse("/view/abc123def456", status_code=303)
 ```
 
 ### 3. Invitation Displayed
+
 ```
 User auto-redirects to: /view/abc123def456
   ↓
@@ -266,6 +294,7 @@ HTML response with:
 ```
 
 ### 4. User Shares Invitation
+
 ```
 User sees invitation page
   ↓
@@ -294,26 +323,31 @@ Friend sees exact same invitation:
 ## 🛡️ Why This Design?
 
 ✅ **No URL Parameters**
+
 - Short clean URL: `/view/abc123def456`
 - Not: `/view?name=Anna&sender=John&message=...&photo=data:image/...`
 - Works with long messages and large photos
 
 ✅ **Persistent Data**
+
 - Links work forever (stored in SQLite)
 - No expiration
 - Cross-device, cross-browser
 
 ✅ **Scalable**
+
 - Database can handle millions of invitations
 - Each invitation is self-contained
 - No user accounts needed
 
 ✅ **Secure**
+
 - No data in URLs (harder to brute force)
 - SQLite file on Railway server
 - HTTPS by default
 
 ✅ **Simple Deployment**
+
 - Single Python file (main.py)
 - No external services (photos in DB)
 - Railway auto-scales
@@ -323,11 +357,13 @@ Friend sees exact same invitation:
 ## 📊 Database (SQLite)
 
 ### File
+
 - `database.db` (auto-created in project root)
 - SQLite is file-based (not server)
 - On Railway: stored on persistent disk
 
 ### Schema
+
 ```sql
 CREATE TABLE invitations (
     id VARCHAR PRIMARY KEY,
@@ -350,6 +386,7 @@ INSERT INTO invitations VALUES (
 ```
 
 ### Access
+
 - Local: Open with `sqlite3 database.db` or SQLite GUI
 - Railway: Download backup or query via SSH
 
@@ -358,6 +395,7 @@ INSERT INTO invitations VALUES (
 ## 🚢 Railway Deployment (Step-by-Step)
 
 ### Step 1: Prepare GitHub
+
 ```bash
 # From project root:
 git add .
@@ -376,16 +414,20 @@ git push origin main
 7. Starts auto-build
 
 ### Step 3: Configure (Optional)
+
 In Railway Dashboard:
+
 - No config needed! Procfile handles it.
 - Environment variables: (none required for basic setup)
 
 ### Step 4: Deploy
+
 - Click "Deploy"
 - Wait 2-5 minutes
 - Railway builds Docker image → starts uvicorn → your site is live
 
 ### Step 5: Get Your URL
+
 - Railways provides: `https://valent-night-production-xxxx.up.railway.app/`
 - Test health: `/health` → should show `{"status":"ok","service":"valentines-invitation"}`
 
@@ -428,17 +470,21 @@ In Railway Dashboard:
 ## 🎨 Customization
 
 ### Change Colors
+
 Edit `templates/index.html` CSS:
+
 ```css
 :root {
-  --primary: #ff1493;      /* Change this */
-  --secondary: #ff69b4;    /* Or this */
-  --accent: #ffd700;       /* Or this */
+  --primary: #ff1493; /* Change this */
+  --secondary: #ff69b4; /* Or this */
+  --accent: #ffd700; /* Or this */
 }
 ```
 
 ### Add Theme
+
 1. Add CSS class in templates (index.html & viewer.html):
+
 ```css
 .theme-newtheme {
   background: linear-gradient(...);
@@ -450,16 +496,17 @@ Edit `templates/index.html` CSS:
 ```
 
 2. Add option in index.html form:
+
 ```html
-<div class="theme-option" data-theme="newtheme">
-  🆕 New Theme
-</div>
+<div class="theme-option" data-theme="newtheme">🆕 New Theme</div>
 ```
 
 3. All good! Theme will work in form & viewer.
 
 ### Modify Photo Compression
+
 Edit `main.py` function `compress_image`:
+
 ```python
 MAX_WIDTH = 800          # Change this
 quality = 70            # Or this (1-100)
@@ -471,11 +518,13 @@ max_size_mb = 5         # Or this
 ## 🔒 Security Notes
 
 ✅ **No Data Breach Risk**
+
 - Photos stored in DB, not external service
 - No user tracking
 - HTTPS by default on Railway
 
 ⚠️ **Considerations**
+
 - Anyone with the URL can see the invitation
 - That's intentional! Share-friendly design
 - SQLite is not accessible from internet
@@ -486,12 +535,14 @@ max_size_mb = 5         # Or this
 ## 📱 Responsive Design
 
 ### Mobile Tested
+
 - Form scales down to fit phone screens
 - Photos display properly
 - Buttons stack vertically
 - All text readable
 
 ### Tested Browsers
+
 - Chrome/Chromium ✅
 - Firefox ✅
 - Safari ✅
@@ -504,6 +555,7 @@ max_size_mb = 5         # Or this
 ## 🎉 Launch!
 
 ### Before Feb 14:
+
 1. ✅ Code complete (you're reading this!)
 2. ✅ LocalTested
 3. ✅ Deployed to Railway
@@ -511,6 +563,7 @@ max_size_mb = 5         # Or this
 5. ✅ Share with friends!
 
 ### Share Message:
+
 ```
 "I built a Valentine's invitation maker! 💝
 
@@ -527,6 +580,7 @@ Try it: https://valent-night-production-xxxx.up.railway.app/
 ## 🆘 If Something Breaks
 
 ### Local Issues
+
 ```bash
 # Clear database and restart
 rm database.db
@@ -535,6 +589,7 @@ python main.py
 ```
 
 ### Railway Issues
+
 ```bash
 # Check logs
 railway logs
@@ -544,6 +599,7 @@ railway up
 ```
 
 ### Still Stuck?
+
 - Check `main.py` for syntax errors: `python -m py_compile main.py`
 - Verify templates/ folder exists and has .html files
 - Ensure requirements.txt is valid: `pip install -r requirements.txt`

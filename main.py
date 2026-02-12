@@ -7,7 +7,7 @@ import uuid
 from io import BytesIO
 from pathlib import Path
 
-from fastapi import FastAPI, UploadFile, Form, HTTPException, File
+from fastapi import FastAPI, UploadFile, Form, HTTPException, File, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -113,9 +113,9 @@ def get_db():
 # ========== ROUTES ==========
 
 @app.get("/", response_class=HTMLResponse)
-async def index():
+async def index(request: Request):
     """Serve the invitation creation form"""
-    return templates.TemplateResponse("index.html", {"request": None})
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/create")
@@ -175,7 +175,7 @@ async def create_invitation(
 
 
 @app.get("/view/{inv_id}", response_class=HTMLResponse)
-async def view_invitation(inv_id: str):
+async def view_invitation(inv_id: str, request: Request):
     """Display the invitation"""
     db = SessionLocal()
     
@@ -191,7 +191,7 @@ async def view_invitation(inv_id: str):
         return templates.TemplateResponse(
             "viewer.html",
             {
-                "request": None,
+                "request": request,
                 "invitation_id": inv_id,
                 "name": invitation.recipient_name,
                 "sender": invitation.sender_name,
