@@ -9,4 +9,4 @@ __pychache__/
 *.env
 
 
-        venv/
+venv/
