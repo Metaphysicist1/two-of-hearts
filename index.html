@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Create your personalized Valentine's Day invitation"
+    />
+    <title>Valentine's Day Invitation Creator 💝</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ========== ROOT VARIABLES ========== */
+      :root {
+        --primary: #ff1493;
+        --secondary: #ff69b4;
+        --accent: #ffd700;
+      }
+
+      /* ========== RESET & BASE ========== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #1a1a2e 0%,
+          #16213e 50%,
+          #0f3460 100%
+        );
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* ========== ANIMATED BACKGROUND ========== */
+      .background-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .bg-blur {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.4;
+      }
+
+      .bg-blur-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 20, 147, 0.6),
+          transparent
+        );
+        top: -150px;
+        left: 3%;
+        animation: float-1 25s infinite ease-in-out;
+      }
+
+      .bg-blur-2 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 105, 180, 0.5),
+          transparent
+        );
+        bottom: -200px;
+        right: 3%;
+        animation: float-2 30s infinite ease-in-out;
+      }
+
+      .bg-blur-3 {
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 215, 0, 0.3),
+          transparent
+        );
+        top: 45%;
+        right: 35%;
+        animation: float-3 28s infinite ease-in-out;
+      }
+
+      @keyframes float-1 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(40px, -50px);
+        }
+      }
+
+      @keyframes float-2 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(-50px, 60px);
+        }
+      }
+
+      @keyframes float-3 {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(50px, 35px);
+        }
+      }
+
+      /* ========== PARTICLE CANVAS ========== */
+      #particleCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* ========== MAIN CONTAINER ========== */
+      .main-container {
+        position: relative;
+        z-index: 10;
+        width: 90%;
+        max-width: 1400px;
+        height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .form-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* ========== GLASS CARD ========== */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(25px);
+        border: 2.5px solid rgba(255, 255, 255, 0.2);
+        border-radius: 40px;
+        padding: 3rem 3rem;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4),
+          0 0 60px rgba(255, 20, 147, 0.15);
+        width: 100%;
+        max-width: 950px;
+        height: auto;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ========== HEADER ========== */
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .title {
+        font-family: "Playfair Display", serif;
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        letter-spacing: -1px;
+      }
+
+      .subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+      }
+
+      /* ========== FORM LAYOUT ========== */
+      .form-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem 3rem;
+        flex: 1;
+        align-items: start;
+      }
+
+      .form-group {
+        position: relative;
+      }
+
+      .form-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      /* ========== LABELS ========== */
+      label {
+        display: block;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.3px;
+      }
+
+      .label-icon {
+        margin-right: 6px;
+      }
+
+      /* ========== INPUTS ========== */
+      input[type="text"],
+      textarea {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 0.9rem 1.1rem;
+        color: #fff;
+        font-size: 0.95rem;
+        font-family: "Inter", sans-serif;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        outline: none;
+      }
+
+      input[type="text"]:focus,
+      textarea:focus {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.15);
+      }
+
+      input[type="text"]::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      textarea {
+        resize: none;
+        min-height: 110px;
+        line-height: 1.6;
+      }
+
+      .char-counter {
+        position: absolute;
+        bottom: 0.6rem;
+        right: 1rem;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.5);
+        pointer-events: none;
+      }
+
+      /* ========== PHOTO UPLOAD ========== */
+      .photo-upload-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .file-input-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 140px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px dashed rgba(255, 255, 255, 0.25);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .file-input-label:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: var(--secondary);
+        transform: translateY(-2px);
+      }
+
+      .upload-content {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.85rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .upload-icon {
+        font-size: 2rem;
+        margin-bottom: 0.4rem;
+      }
+
+      #photoPreview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.3s;
+        border-radius: 14px;
+      }
+
+      #photoPreview.show {
+        opacity: 1;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      /* ========== THEME SELECTOR ========== */
+      .theme-selector {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+      }
+
+      .theme-option {
+        padding: 0.8rem;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-align: center;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+      }
+
+      .theme-option:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-2px);
+      }
+
+      .theme-option.active {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(255, 20, 147, 0.3);
+      }
+
+      input[type="hidden"] {
+        display: none;
+      }
+
+      /* ========== BUTTONS ========== */
+      .button-group {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 1rem 1.5rem;
+        border: none;
+        border-radius: 16px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        font-family: "Inter", sans-serif;
+        letter-spacing: 0.3px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(255, 20, 147, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(255, 20, 147, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-3px);
+      }
+
+      .btn:active {
+        transform: translateY(-1px);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* ========== ERROR MESSAGES ========== */
+      .error-message {
+        color: #ff6b9d;
+        font-size: 0.8rem;
+        margin-top: 0.4rem;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: all 0.3s;
+      }
+
+      .error-message.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ========== SUCCESS MESSAGE ========== */
+      #successMessage {
+        grid-column: 1 / -1;
+        background: rgba(76, 175, 80, 0.15);
+        border: 1.5px solid rgba(76, 175, 80, 0.3);
+        border-radius: 12px;
+        padding: 1rem;
+        color: #90ee90;
+        text-align: center;
+        font-size: 0.9rem;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s;
+        margin-top: 0.5rem;
+      }
+
+      #successMessage.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      #successMessage a {
+        color: #90ee90;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+
+      /* ========== RESPONSIVE ========== */
+      @media (max-width: 768px) {
+        .glass-card {
+          padding: 2rem 1.5rem;
+          max-height: 95vh;
+          overflow-y: auto;
+        }
+
+        .title {
+          font-size: 2rem;
+        }
+
+        .form-content {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .theme-selector {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
+
+      @media (max-height: 700px) {
+        .glass-card {
+          padding: 2rem;
+          overflow-y: auto;
+        }
+
+        .header {
+          margin-bottom: 1.5rem;
+        }
+
+        .title {
+          font-size: 2rem;
+        }
+
+        .form-content {
+          gap: 1.5rem 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Animated Background -->
+    <div class="background-animation">
+      <div class="bg-blur bg-blur-1"></div>
+      <div class="bg-blur bg-blur-2"></div>
+      <div class="bg-blur bg-blur-3"></div>
+    </div>
+
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="main-container">
+      <div class="form-wrapper">
+        <div class="glass-card">
+          <!-- Header -->
+          <div class="header">
+            <h1 class="title">💝 Valentine's Invitation</h1>
+            <p class="subtitle">Create a heartfelt message for someone special</p>
+          </div>
+
+          <!-- Form -->
+          <form id="invitationForm">
+            <div class="form-content">
+              <!-- Recipient Name -->
+              <div class="form-group">
+                <label for="recipientName">
+                  <span class="label-icon">👤</span>Recipient's Name
+                </label>
+                <input
+                  type="text"
+                  id="recipientName"
+                  placeholder="Enter their name..."
+                  required
+                />
+                <div id="recipientNameError" class="error-message"></div>
+              </div>
+
+              <!-- Sender Name -->
+              <div class="form-group">
+                <label for="senderName">
+                  <span class="label-icon">✨</span>Your Name
+                </label>
+                <input
+                  type="text"
+                  id="senderName"
+                  placeholder="Your name (optional)"
+                />
+              </div>
+
+              <!-- Photo Upload -->
+              <div class="form-group">
+                <label>
+                  <span class="label-icon">📸</span>Add Photo (Optional)
+                </label>
+                <div class="photo-upload-container">
+                  <label for="photoInput" class="file-input-label" id="fileInputLabel">
+                    <div class="upload-content">
+                      <div class="upload-icon">📷</div>
+                      <div>Click or drag to upload</div>
+                    </div>
+                    <img id="photoPreview" alt="Preview" />
+                  </label>
+                  <input
+                    type="file"
+                    id="photoInput"
+                    accept="image/*"
+                  />
+                </div>
+              </div>
+
+              <!-- Theme Selector -->
+              <div class="form-group">
+                <label>
+                  <span class="label-icon">🎨</span>Choose Theme
+                </label>
+                <div class="theme-selector">
+                  <div class="theme-option active" data-theme="romantic">
+                    💕 Romantic
+                  </div>
+                  <div class="theme-option" data-theme="playful">
+                    🎉 Playful
+                  </div>
+                  <div class="theme-option" data-theme="elegant">
+                    ✨ Elegant
+                  </div>
+                  <div class="theme-option" data-theme="minimalist">
+                    🤍 Minimal
+                  </div>
+                </div>
+                <input type="hidden" id="theme" value="romantic" />
+              </div>
+
+              <!-- Message -->
+              <div class="form-group full-width">
+                <label for="message">
+                  <span class="label-icon">💌</span>Your Message
+                </label>
+                <textarea
+                  id="message"
+                  placeholder="Write your heartfelt message here..."
+                  maxlength="500"
+                  required
+                ></textarea>
+                <div class="char-counter">
+                  <span id="charCount">0</span>/500
+                </div>
+                <div id="messageError" class="error-message"></div>
+              </div>
+
+              <!-- Buttons -->
+              <div class="button-group">
+                <button type="button" class="btn btn-secondary" id="previewBtn">
+                  👁️ Preview
+                </button>
+                <button type="button" class="btn btn-primary" id="generateBtn">
+                  🚀 Generate & Share
+                </button>
+              </div>
+
+              <!-- Success Message -->
+              <div id="successMessage"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Particle Animation
+      const canvas = document.getElementById("particleCanvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+
+      const hearts = [];
+      const heartSymbols = ["♥", "💕", "💖", "💗"];
+      const colors = ["#ff1493", "#ff69b4", "#ffd700"];
+
+      class Heart {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = canvas.height + 20;
+          this.size = Math.random() * 20 + 15;
+          this.speedY = Math.random() * 1.5 + 0.8;
+          this.speedX = (Math.random() - 0.5) * 1.2;
+          this.symbol = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+          this.color = colors[Math.floor(Math.random() * colors.length)];
+          this.opacity = Math.random() * 0.6 + 0.3;
+          this.rotation = Math.random() * Math.PI * 2;
+          this.rotationSpeed = (Math.random() - 0.5) * 0.03;
+        }
+
+        update() {
+          this.y -= this.speedY;
+          this.x += this.speedX;
+          this.rotation += this.rotationSpeed;
+
+          if (this.y < -30) {
+            this.y = canvas.height + 20;
+            this.x = Math.random() * canvas.width;
+          }
+        }
+
+        draw() {
+          ctx.save();
+          ctx.globalAlpha = this.opacity;
+          ctx.font = `${this.size}px Arial`;
+          ctx.fillStyle = this.color;
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.rotation);
+          ctx.fillText(this.symbol, 0, 0);
+          ctx.restore();
+        }
+      }
+
+      for (let i = 0; i < 30; i++) {
+        hearts.push(new Heart());
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        hearts.forEach((heart) => {
+          heart.update();
+          heart.draw();
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+
+      // Form Functionality
+      let currentTheme = "romantic";
+      let currentPhotoDataURL = null;
+
+      function sanitizeText(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML.replace(/\n/g, "<br>");
+      }
+
+      // Photo Upload
+      const photoInput = document.getElementById("photoInput");
+      const photoPreview = document.getElementById("photoPreview");
+      const fileInputLabel = document.getElementById("fileInputLabel");
+
+      photoInput.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            currentPhotoDataURL = event.target.result;
+            photoPreview.src = currentPhotoDataURL;
+            photoPreview.classList.add("show");
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      fileInputLabel.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        fileInputLabel.style.borderColor = "var(--secondary)";
+      });
+
+      fileInputLabel.addEventListener("dragleave", () => {
+        fileInputLabel.style.borderColor = "rgba(255, 255, 255, 0.25)";
+      });
+
+      fileInputLabel.addEventListener("drop", (e) => {
+        e.preventDefault();
+        fileInputLabel.style.borderColor = "rgba(255, 255, 255, 0.25)";
+        const files = e.dataTransfer.files;
+        photoInput.files = files;
+        photoInput.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+
+      // Theme Selection
+      document.querySelectorAll(".theme-option").forEach((option) => {
+        option.addEventListener("click", function () {
+          document
+            .querySelectorAll(".theme-option")
+            .forEach((o) => o.classList.remove("active"));
+          this.classList.add("active");
+          currentTheme = this.dataset.theme;
+          document.getElementById("theme").value = currentTheme;
+        });
+      });
+
+      // Character Counter
+      document.getElementById("message").addEventListener("input", function () {
+        document.getElementById("charCount").textContent = this.value.length;
+      });
+
+      document.getElementById("charCount").textContent =
+        document.getElementById("message").value.length;
+
+      // Form Validation
+      function validateForm() {
+        const errors = {};
+        const recipientName = document
+          .getElementById("recipientName")
+          .value.trim();
+        const message = document.getElementById("message").value.trim();
+
+        if (!recipientName) {
+          errors.recipientName = "❌ Please enter recipient's name";
+        }
+        if (!message) {
+          errors.message = "❌ Please enter your message";
+        }
+
+        return errors;
+      }
+
+      function showErrors(errors) {
+        document.querySelectorAll(".error-message").forEach((el) => {
+          el.classList.remove("show");
+          el.textContent = "";
+        });
+
+        Object.keys(errors).forEach((key) => {
+          const errorEl = document.getElementById(key + "Error");
+          if (errorEl) {
+            errorEl.textContent = errors[key];
+            errorEl.classList.add("show");
+          }
+        });
+      }
+
+      function generateInvitationHTML(params) {
+        return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>💝 Valentine's Invitation</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}html,body{width:100%;height:100%;font-family:'Inter',sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}.letter-container{position:relative;max-width:600px;width:100%;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:60px 40px;box-shadow:0 8px 32px rgba(255,20,147,0.15);animation:slideIn 0.8s ease-out,float 6s ease-in-out infinite}@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.heart-float{position:absolute;font-size:20px;opacity:0;animation:heartFloat 4s ease-in infinite;pointer-events:none}@keyframes heartFloat{0%{bottom:-10px;opacity:1}100%{bottom:100%;opacity:0;transform:translateX(var(--tx,0))}}.letter-header{font-size:18px;font-weight:300;letter-spacing:2px;margin-bottom:30px;color:rgba(255,255,255,0.9)}.letter-body{margin-bottom:40px}.letter-message{line-height:1.8;font-size:15px;text-align:justify;color:rgba(255,255,255,0.85);margin-bottom:20px}.letter-photo{width:100%;max-width:300px;height:auto;border-radius:12px;display:block;margin:20px auto;box-shadow:0 8px 20px rgba(255,20,147,0.3)}.letter-footer{text-align:right;color:rgba(255,255,255,0.8);font-size:14px;margin-top:30px}.letter-signature{margin-top:10px;font-family:'Playfair Display',serif;font-size:24px;background:linear-gradient(135deg,#ff1493,#ff69b4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.theme-romantic{background:linear-gradient(135deg,rgba(255,20,147,0.15),rgba(255,105,180,0.1));border:1px solid rgba(255,105,180,0.3)}.theme-romantic .letter-header{color:#ff69b4}.theme-playful{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,165,0,0.1));border:2px dashed #ffd700}.theme-playful .letter-header{color:#ffd700;font-family:'Comic Sans MS',cursive}.theme-elegant{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(184,148,26,0.1));border:1px solid rgba(212,175,55,0.3)}.theme-elegant .letter-header{color:#d4af37;font-family:'Playfair Display',serif;text-transform:uppercase}.theme-minimalist{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.2)}.action-buttons{display:flex;gap:10px;justify-content:center;margin-top:30px}button{padding:12px 24px;background:linear-gradient(135deg,#ff1493,#ff69b4);color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:600;transition:all 0.3s;z-index:100}button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,20,147,0.4)}.btn-back{background:rgba(255,255,255,0.2)}.placeholder-photo{width:100%;max-width:300px;height:200px;background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05));border-radius:12px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);margin:20px auto;border:1px dashed rgba(255,255,255,0.3)}@media(max-width:600px){.letter-container{padding:40px 20px}.letter-header{font-size:16px}.letter-message{font-size:14px}.action-buttons{flex-direction:column}button{width:100%}}</style></head><body><div class="letter-container theme-${params.theme}"><div class="letter-header">Dear <strong>${sanitizeText(params.name)}</strong>,</div><div class="letter-body">${params.photo ? `<img src="${params.photo}" alt="Photo" class="letter-photo">` : '<div class="placeholder-photo">📸</div>'}<p class="letter-message">${sanitizeText(params.message)}</p></div><div class="letter-footer"><p>With love,</p><div class="letter-signature">${sanitizeText(params.sender)}</div></div><div class="action-buttons"><button onclick="copyUrl()">📋 Share</button><button class="btn-back" onclick="goBack()">← Back</button></div></div><script>const container=document.querySelector('.letter-container');setInterval(()=>{const heart=document.createElement('div');heart.className='heart-float';heart.textContent='♥';heart.style.left=Math.random()*100+'%';heart.style.setProperty('--tx',(Math.random()-0.5)*100+'px');heart.style.color=['#ff1493','#ff69b4','#ffd700'][Math.floor(Math.random()*3)];container.appendChild(heart);setTimeout(()=>heart.remove(),4000)},300);function copyUrl(){navigator.clipboard.writeText(window.location.href).catch(()=>{const textarea=document.createElement('textarea');textarea.value=window.location.href;document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea)});alert('✅ Link copied!')}function goBack(){window.history.back()}<\/script><\/body><\/html>`;
+      }
+
+      // Preview Button
+      document
+        .getElementById("previewBtn")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const errors = validateForm();
+          if (Object.keys(errors).length > 0) {
+            showErrors(errors);
+            return;
+          }
+
+          document.querySelectorAll(".error-message").forEach((el) => {
+            el.classList.remove("show");
+          });
+
+          const recipientName = document
+            .getElementById("recipientName")
+            .value.trim();
+          const senderName =
+            document.getElementById("senderName").value.trim() ||
+            "Your Secret Admirer";
+          const message = document.getElementById("message").value.trim();
+
+          const params = {
+            name: recipientName,
+            sender: senderName,
+            message: message,
+            theme: currentTheme,
+            photo: currentPhotoDataURL,
+          };
+
+          const invitationHTML = generateInvitationHTML(params);
+          const previewWindow = window.open("", "_blank");
+          previewWindow.document.write(invitationHTML);
+          previewWindow.document.close();
+        });
+
+      // Generate Button
+      document
+        .getElementById("generateBtn")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const errors = validateForm();
+          if (Object.keys(errors).length > 0) {
+            showErrors(errors);
+            return;
+          }
+
+          document.querySelectorAll(".error-message").forEach((el) => {
+            el.classList.remove("show");
+          });
+
+          const recipientName = document
+            .getElementById("recipientName")
+            .value.trim();
+          const senderName =
+            document.getElementById("senderName").value.trim() ||
+            "Your Secret Admirer";
+          const message = document.getElementById("message").value.trim();
+
+          this.disabled = true;
+          const originalText = this.textContent;
+          this.textContent = "⏳ Generating...";
+
+          try {
+            const invitationData = {
+              name: recipientName,
+              sender: senderName,
+              message: message,
+              theme: currentTheme,
+              photo: currentPhotoDataURL,
+            };
+
+            sessionStorage.setItem(
+              "invitationData",
+              JSON.stringify(invitationData),
+            );
+
+            const invitationURL = `viewer-modern.html?id=${Date.now()}`;
+
+            const successMsg = document.getElementById("successMessage");
+            successMsg.innerHTML = `
+                    ✅ <strong>Success!</strong> Your invitation is ready!<br>
+                    <a href="${invitationURL}" target="_blank">Open in new tab to share</a>
+                `;
+            successMsg.classList.add("show");
+
+            window.open(invitationURL, "_blank");
+          } catch (error) {
+            console.error("Generation error:", error);
+            const successMsg = document.getElementById("successMessage");
+            successMsg.innerHTML =
+              "❌ Error generating invitation. Please try again.";
+            successMsg.classList.add("show");
+          } finally {
+            this.disabled = false;
+            this.textContent = originalText;
+          }
+        });
+    </script>
+  </body>
+</html>

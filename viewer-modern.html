@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 Valentine's Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .letter-container {
+            position: relative;
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 8px 32px rgba(255, 20, 147, 0.15);
+            animation: slideIn 0.8s ease-out, float 6s ease-in-out infinite;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heart-float {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: heartFloat 4s ease-in infinite;
+            pointer-events: none;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                bottom: -10px;
+                opacity: 1;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+                transform: translateX(var(--tx, 0));
+            }
+        }
+
+        .letter-header {
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .letter-body {
+            margin-bottom: 40px;
+        }
+
+        .letter-message {
+            line-height: 1.8;
+            font-size: 15px;
+            text-align: justify;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 20px;
+        }
+
+        .letter-photo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 8px 20px rgba(255, 20, 147, 0.3);
+        }
+
+        .letter-footer {
+            text-align: right;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        .letter-signature {
+            margin-top: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-romantic {
+            background: linear-gradient(135deg, rgba(255, 20, 147, 0.15), rgba(255, 105, 180, 0.1));
+            border: 1px solid rgba(255, 105, 180, 0.3);
+        }
+
+        .theme-romantic .letter-header {
+            color: #ff69b4;
+        }
+
+        .theme-playful {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+            border: 2px dashed #ffd700;
+        }
+
+        .theme-playful .letter-header {
+            color: #ffd700;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        .theme-elegant {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(184, 148, 26, 0.1));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .theme-elegant .letter-header {
+            color: #d4af37;
+            font-family: 'Playfair Display', serif;
+            text-transform: uppercase;
+        }
+
+        .theme-minimalist {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .placeholder-photo {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 20px auto;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .letter-container {
+                padding: 40px 20px;
+            }
+
+            .letter-header {
+                font-size: 16px;
+            }
+
+            .letter-message {
+                font-size: 14px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="letter-container" id="letterContainer">
+        <div class="letter-header">
+            Dear <strong id="recipientName">Loading...</strong>,
+        </div>
+        <div class="letter-body">
+            <div id="photoContainer"></div>
+            <p class="letter-message" id="message">Loading your message...</p>
+        </div>
+        <div class="letter-footer">
+            <p>With love,</p>
+            <div class="letter-signature" id="senderName">...</div>
+        </div>
+        <div class="action-buttons">
+            <button onclick="copyUrl()">📋 Share Link</button>
+            <button class="btn-back" onclick="goBack()">← Create New</button>
+        </div>
+    </div>
+
+    <script>
+        // Floating hearts animation
+        const container = document.querySelector('.letter-container');
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart-float';
+            heart.textContent = '♥';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+            heart.style.color = ['#ff1493', '#ff69b4', '#ffd700'][Math.floor(Math.random() * 3)];
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }, 300);
+
+        // Load invitation data
+        function loadInvitation() {
+            try {
+                const data = sessionStorage.getItem('invitationData');
+                if (data) {
+                    const invitation = JSON.parse(data);
+                    
+                    // Set content
+                    document.getElementById('recipientName').textContent = invitation.name;
+                    document.getElementById('senderName').textContent = invitation.sender;
+                    document.getElementById('message').innerHTML = invitation.message.replace(/\n/g, '<br>');
+                    
+                    // Set theme
+                    const letterContainer = document.getElementById('letterContainer');
+                    letterContainer.classList.add('theme-' + invitation.theme);
+                    
+                    // Set photo
+                    const photoContainer = document.getElementById('photoContainer');
+                    if (invitation.photo) {
+                        photoContainer.innerHTML = `<img src="${invitation.photo}" alt="Photo" class="letter-photo">`;
+                    } else {
+                        photoContainer.innerHTML = '<div class="placeholder-photo">📸</div>';
+                    }
+                } else {
+                    document.getElementById('recipientName').textContent = 'Someone Special';
+                    document.getElementById('senderName').textContent = 'Your Secret Admirer';
+                    document.getElementById('message').textContent = 'No invitation data found. Please create a new invitation.';
+                }
+            } catch (error) {
+                console.error('Error loading invitation:', error);
+                document.getElementById('message').textContent = 'Error loading invitation. Please try again.';
+            }
+        }
+
+        function copyUrl() {
+            navigator.clipboard.writeText(window.location.href).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = window.location.href;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            });
+            alert('✅ Link copied to clipboard!');
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Load invitation when page loads
+        loadInvitation();
+    </script>
+</body>
+</html>
