@@ -29,13 +29,13 @@
         box-sizing: border-box;
       }
 
+      /* Allow scrolling on small devices and use mobile-first sizing */
       html,
       body {
         width: 100%;
-        height: 100vh;
+        min-height: 100vh;
         margin: 0;
         padding: 0;
-        overflow: hidden;
       }
 
       body {
@@ -49,6 +49,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 20px;
       }
 
       /* ========== ANIMATED BACKGROUND ========== */
@@ -154,8 +155,7 @@
       .main-container {
         position: relative;
         z-index: 10;
-        width: 90%;
-        max-width: 950px;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -165,15 +165,14 @@
       /* ========== GLASS CARD ========== */
       .glass-card {
         background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(25px);
-        border: 2.5px solid rgba(255, 255, 255, 0.2);
-        border-radius: 40px;
-        padding: 3rem 3rem;
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.14);
+        border-radius: clamp(12px, 4vw, 40px);
+        padding: clamp(18px, 4.5vw, 48px);
         box-shadow:
-          0 25px 80px rgba(0, 0, 0, 0.4),
-          0 0 60px rgba(255, 20, 147, 0.15);
-        width: 100%;
-        max-width: 950px;
+          0 20px 60px rgba(0, 0, 0, 0.38),
+          0 0 40px rgba(255, 20, 147, 0.12) inset;
+        width: min(92vw, 560px);
         display: flex;
         flex-direction: column;
       }
@@ -186,14 +185,14 @@
 
       .title {
         font-family: "Playfair Display", serif;
-        font-size: 2.5rem;
+        font-size: clamp(1.4rem, 5vw, 2.4rem);
         font-weight: 900;
         background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         margin-bottom: 0.5rem;
-        letter-spacing: -1px;
+        letter-spacing: -0.5px;
       }
 
       .subtitle {
@@ -204,10 +203,11 @@
       }
 
       /* ========== FORM LAYOUT ========== */
+      /* Mobile-first: single column, expand to two columns on wider screens */
       .form-content {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem 3rem;
+        grid-template-columns: 1fr;
+        gap: 1rem 1rem;
         align-items: start;
       }
 
@@ -288,14 +288,16 @@
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: 140px;
-        background: rgba(255, 255, 255, 0.08);
-        border: 2px dashed rgba(255, 255, 255, 0.25);
-        border-radius: 16px;
+        height: auto;
+        min-height: 120px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 2px dashed rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.25s ease;
         position: relative;
         overflow: hidden;
+        padding: 0.75rem;
       }
 
       .file-input-label:hover {
@@ -317,16 +319,23 @@
         margin-bottom: 0.4rem;
       }
 
+      /* Photo preview wrapper and image fit */
+      .photo-wrapper {
+        width: 100%;
+        aspect-ratio: 4/3;
+        max-height: 45vh;
+        overflow: hidden;
+        border-radius: 10px;
+        margin-top: 6px;
+      }
+
       #photoPreview {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
         opacity: 0;
-        transition: opacity 0.3s;
-        border-radius: 14px;
+        transition: opacity 0.25s ease;
       }
 
       #photoPreview.show {
@@ -377,23 +386,27 @@
       .button-group {
         grid-column: 1 / -1;
         display: flex;
-        gap: 1rem;
+        gap: 0.75rem;
         margin-top: 1rem;
+        align-items: center;
       }
 
       .btn {
         flex: 1;
-        padding: 1rem 1.5rem;
+        padding: 0.95rem 1.25rem;
         border: none;
-        border-radius: 16px;
-        font-size: 1rem;
+        border-radius: 14px;
+        font-size: clamp(0.95rem, 2.6vw, 1rem);
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease;
         position: relative;
         overflow: hidden;
         font-family: "Inter", sans-serif;
         letter-spacing: 0.3px;
+        min-width: 140px;
       }
 
       .btn-primary {
@@ -465,22 +478,23 @@
       }
 
       /* ========== RESPONSIVE ========== */
-      @media (max-width: 768px) {
+      /* Desktop: enable two-column layout */
+      @media (min-width: 769px) {
         .glass-card {
-          padding: 2rem 1.5rem;
+          padding: clamp(24px, 4vw, 48px);
         }
-
-        .title {
-          font-size: 2rem;
-        }
-
         .form-content {
-          grid-template-columns: 1fr;
-          gap: 1.5rem;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem 2rem;
         }
+      }
 
-        .button-group {
-          flex-direction: column;
+      /* Reduce heavy visuals on small screens */
+      @media (max-width: 420px) {
+        .bg-blur-1,
+        .bg-blur-2,
+        .bg-blur-3 {
+          display: none;
         }
       }
     </style>
@@ -546,7 +560,9 @@
                     <div class="upload-icon">📷</div>
                     <div>Click or drag to upload</div>
                   </div>
-                  <img id="photoPreview" alt="Preview" />
+                  <div class="photo-wrapper">
+                    <img id="photoPreview" alt="Preview" />
+                  </div>
                 </label>
                 <input type="file" id="photo" name="photo" accept="image/*" />
               </div>
@@ -602,11 +618,6 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      window.addEventListener("resize", () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      });
-
       const hearts = [];
       const heartSymbols = ["♥", "💕", "💖", "💗"];
       const colors = ["#ff1493", "#ff69b4", "#ffd700"];
@@ -649,9 +660,20 @@
         }
       }
 
-      for (let i = 0; i < 30; i++) {
-        hearts.push(new Heart());
+      // Build a responsive number of hearts based on viewport width
+      function buildHearts(count) {
+        hearts.length = 0;
+        for (let i = 0; i < count; i++) {
+          hearts.push(new Heart());
+        }
       }
+
+      function particleCountForWidth(width) {
+        // fewer particles on small screens, more on larger
+        return Math.max(6, Math.round(width / 40));
+      }
+
+      buildHearts(particleCountForWidth(window.innerWidth));
 
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -665,6 +687,17 @@
       }
 
       animate();
+
+      // Rebuild hearts on resize for better performance and layout
+      let resizeTimer;
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          buildHearts(particleCountForWidth(window.innerWidth));
+        }, 160);
+      });
 
       // Form handling
       let currentTheme = "romantic";
